@@ -1,3 +1,13 @@
+# Custom
+
+# Hail
+**/*.mt
+**/.*crc
+**/*.bgen
+**/*.bgen.bgi
+**/*.sample
+**/*.idx2
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
