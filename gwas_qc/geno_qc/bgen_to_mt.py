@@ -118,7 +118,7 @@ def main():
 		import dxpy
 
 		my_database = dxpy.find_one_data_object(
-			name="my_database", 
+			name=args.ukb_db_name, 
 			project=dxpy.find_one_project()["id"]
 		)["id"]
 		sc = pyspark.SparkContext()
@@ -126,7 +126,7 @@ def main():
 		hl.init(
 			sc=sc, 
 			default_reference=args.ref_genome,
-			tmp_dir=f'dnax://{my_database}/tmp/'
+			tmp_dir=f'dnax://{args.ukb_db_name}/tmp/'
 		)
 	else:
 		hl.init(
@@ -185,7 +185,7 @@ def main():
 	# Write MatrixTable
 	if args.ukb_db_name is not None:
 		bgen_mt.write(
-			f'dnax://{my_database}/{args.write_path}',
+			f'dnax://{args.ukb_db_name}/{args.write_path}',
 			overwrite=True,
 		)
 	else:
