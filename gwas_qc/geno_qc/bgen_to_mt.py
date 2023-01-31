@@ -28,6 +28,9 @@ def main():
 		sample_idx_name (str, deault: 's'): Name of sample index
 			column in BGEN file. Default: 's'. Only used if exclude_samples
 			is not None.
+		ukb_db_name (str, or None): If not None, will init Hail with
+			spark as required when using ukb RAP and will save data
+			in dnax://{ukb_db_name's id}/{write_path}
 	"""
 
 	parser = argparse.ArgumentParser()
@@ -96,13 +99,39 @@ def main():
 		help='Name of sample index column in BGEN file. Default: s. '
 		'Only used if exclude_samples is not None.',
 	)
+	parser.add_argument(
+		'-u',
+		'--ukb_db_name',
+		type=str,
+		default=None,
+		help='If not None, will init Hail with spark as required when '
+		'using ukb RAP and will save data in dnax://{ukb_db_name\'s id}/'
+		'{write_path}',
+	)
 
 	args = parser.parse_args()
 
 	# Initialize Hail
-	hl.init(
-		default_reference=args.ref_genome,
-	)
+
+	if args.ukb_db_name is not None:
+		import pyspark
+		import dxpy
+
+		my_database = dxpy.find_one_data_object(
+			name="my_database", 
+			project=dxpy.find_one_project()["id"]
+		)["id"]
+		sc = pyspark.SparkContext()
+		spark = pyspark.sql.SparkSession(sc)
+		hl.init(
+			sc=sc, 
+			default_reference=args.ref_genome,
+			tmp_dir=f'dnax://{my_database}/tmp/'
+		)
+	else:
+		hl.init(
+			default_reference=args.ref_genome,
+		)
 
 	# Create BGEN indices if necessary
 	if args.index_bgen_local:
@@ -154,4 +183,10 @@ def main():
 		bgen_mt = bgen_mt.anti_join_cols(excluded_samples)
 
 	# Write MatrixTable
-	bgen_mt.write(args.write_path, overwrite=True)
+	if args.ukb_db_name is not None:
+		bgen_mt.write(
+			f'dnax://{my_database}/{args.write_path}',
+			overwrite=True,
+		)
+	else:
+		bgen_mt.write(args.write_path, overwrite=True)
