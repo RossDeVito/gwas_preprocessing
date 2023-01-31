@@ -129,7 +129,10 @@ def main():
 			# tmp_dir=f'dnax://{args.ukb_db_name}/tmp/'
 		)
 		file_prefix = 'file://'
-		contig_recoding={"19": "chr19"}
+		ref = hl.get_reference(args.ref_genome)
+		contig_recoding = { 
+			ref_contig.replace("chr", ""): ref_contig for ref_contig in ref.contigs if "chr" in ref_contig 
+		}
 	else:
 		hl.init(
 			default_reference=args.ref_genome,
