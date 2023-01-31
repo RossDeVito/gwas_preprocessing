@@ -117,7 +117,7 @@ def main():
 		import pyspark
 		import dxpy
 
-		my_database = dxpy.find_one_data_object(
+		db_uri = dxpy.find_one_data_object(
 			name=args.ukb_db_name, 
 			project=dxpy.find_one_project()["id"]
 		)["id"]
@@ -202,8 +202,12 @@ def main():
 
 	# Write MatrixTable
 	if args.ukb_db_name is not None:
+		print(
+			"Writing to dnax://{}/{}".format(db_uri, args.write_path),
+			flush=True
+		)
 		bgen_mt.write(
-			f'dnax://{args.ukb_db_name}/{args.write_path}',
+			f'dnax://{db_uri}/{args.write_path}',
 			overwrite=True,
 		)
 	else:
