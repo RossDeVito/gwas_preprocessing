@@ -175,7 +175,7 @@ def main():
 		file_prefix + args.bgen_path,
 		index_file_map=bgen_to_idx if args.index_bgen_local else None,
 		entry_fields=['GT', 'GP', 'dosage'],
-		sample_file=args.sample_path if args.sample_file else None,
+		sample_file=file_prefix + args.sample_path if args.sample_file else None,
 	)
 
 	# Load sample IDs to exclude
