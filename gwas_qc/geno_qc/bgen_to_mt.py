@@ -129,11 +129,13 @@ def main():
 			# tmp_dir=f'dnax://{args.ukb_db_name}/tmp/'
 		)
 		file_prefix = 'file://'
+		contig_recoding={"19": "chr19"}
 	else:
 		hl.init(
 			default_reference=args.ref_genome,
 		)
 		file_prefix = ''
+		contig_recoding=None
 
 	# Create BGEN indices if necessary
 	if args.index_bgen_local:
@@ -144,6 +146,7 @@ def main():
 		hl.index_bgen(
 			file_prefix + args.bgen_path,
 			index_file_map=bgen_to_idx,
+			contig_recoding=contig_recoding,
 		)
 
 	# Create sample file path if necessary
