@@ -121,10 +121,20 @@ def main():
 			name=args.ukb_db_name, 
 			project=dxpy.find_one_project()["id"]
 		)["id"]
-		sc = pyspark.SparkContext()
-		spark = pyspark.sql.SparkSession(sc)
+
+		# sc = pyspark.SparkContext()
+		# spark = pyspark.sql.SparkSession(sc)
+		
+		builder = (
+			pyspark.sql.SparkSession
+			.builder
+			.enableHiveSupport()
+			.config("spark.shuffle.mapStatus.compression.codec", "lz4") 
+		)
+		spark = builder.getOrCreate()
+		
 		hl.init(
-			sc=sc, 
+			sc=spark.sparkContext, # sc
 			default_reference=args.ref_genome,
 			# tmp_dir=f'dnax://{args.ukb_db_name}/tmp/'
 		)
