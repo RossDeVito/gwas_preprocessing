@@ -6,3 +6,7 @@ pip install --force-reinstall -v "pyproj==3.3.1"
 # Git pull and fix ownership issure
 git clone https://github.com/RossDeVito/gwas_qc
 git config --global --add safe.directory /home/dnanexus/gwas_qc
+
+# install gwas_qc
+cd gwas_qc
+pip install -e .
