@@ -126,17 +126,19 @@ def main():
 		hl.init(
 			sc=sc, 
 			default_reference=args.ref_genome,
-			tmp_dir=f'dnax://{args.ukb_db_name}/tmp/'
+			# tmp_dir=f'dnax://{args.ukb_db_name}/tmp/'
 		)
+		file_prefix = 'file://'
 	else:
 		hl.init(
 			default_reference=args.ref_genome,
 		)
+		file_prefix = ''
 
 	# Create BGEN indices if necessary
 	if args.index_bgen_local:
 		bgen_to_idx = {
-			bgen_path: os.path.basename(bgen_path) + '.idx2'
+			file_prefix + bgen_path: os.path.basename(bgen_path) + '.idx2'
 			for bgen_path in [args.bgen_path]
 		}
 		hl.index_bgen(
