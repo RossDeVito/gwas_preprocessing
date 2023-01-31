@@ -142,7 +142,7 @@ def main():
 			for bgen_path in [args.bgen_path]
 		}
 		hl.index_bgen(
-			args.bgen_path,
+			file_prefix + args.bgen_path,
 			index_file_map=bgen_to_idx,
 		)
 
