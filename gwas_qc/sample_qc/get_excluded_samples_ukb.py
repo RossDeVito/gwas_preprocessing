@@ -63,8 +63,13 @@ if __name__ == '__main__':
 
 	# Save samples to exclude
 	exclude_samples.to_csv(
-		'exclude_samples.tsv',
+		'excludes_samples.tsv',
 		header=False,
 		index=False,
 		sep='\t',
+	)
+
+	# run dx upload excludes_samples.tsv
+	os.system(
+		'dx upload excluded_samples.tsv --path /rdevito/project1_data/excluded_samples.tsv'
 	)
