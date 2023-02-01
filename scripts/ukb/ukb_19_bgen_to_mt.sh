@@ -1,8 +1,11 @@
 #!/bin/bash
 
+GENO_DATA_DIR='/mnt/project/Bulk/Exome sequences/Population level exome OQFE variants, BGEN format - final release'
+
 bgen-to-mt \
-	-b '/mnt/project/Bulk/Exome sequences/Population level exome OQFE variants, BGEN format - final release/ukb23159_c19_b0_v1.bgen' \
 	-w chr19_geno.mt \
 	-i \
 	-s \
 	-u rdevito_p1_db
+	-b "$GENO_DATA_DIR/ukb23159_c19_b0_v1.bgen"
+	
