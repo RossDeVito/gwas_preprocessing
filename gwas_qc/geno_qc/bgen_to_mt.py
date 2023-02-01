@@ -148,8 +148,9 @@ def main():
 			file_prefix + bgen_path: os.path.basename(bgen_path) + '.idx2'
 			for bgen_path in args.bgen_paths
 		}
+		bgen_paths = list(bgen_to_idx.keys())
 		hl.index_bgen(
-			list(bgen_to_idx.keys()),
+			bgen_paths,
 			index_file_map=bgen_to_idx,
 			contig_recoding=contig_recoding,
 		)
@@ -164,8 +165,9 @@ def main():
 		]
 
 	# Load BGEN as MatrixTable
+	print(bgen_paths, flush=True)
 	bgen_mt = hl.import_bgen(
-		[file_prefix + bgen_path for bgen_path in args.bgen_paths],
+		bgen_paths,
 		index_file_map=bgen_to_idx if args.index_bgen_local else None,
 		entry_fields=['GT', 'GP', 'dosage'],
 		sample_file=sample_paths[0] if args.sample_file else None,
