@@ -7,6 +7,6 @@ bgen-to-mt \
 	-i \
 	-s \
 	-e /mnt/project/rdevito/project1_data/excluded_samples.tsv \
-	-u rdevito_p1_db
+	-u rdevito_p1_db \
 	-b "$GENO_DATA_DIR/ukb23159_c19_b0_v1.bgen"
 	
