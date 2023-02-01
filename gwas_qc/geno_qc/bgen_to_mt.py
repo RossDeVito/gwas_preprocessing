@@ -170,7 +170,7 @@ def main():
 		bgen_paths,
 		index_file_map=bgen_to_idx if args.index_bgen_local else None,
 		entry_fields=['GT', 'GP', 'dosage'],
-		sample_file=sample_paths[0] if args.sample_file else None,
+		sample_file=file_prefix+sample_paths[0] if args.sample_file else None,
 	)
 
 	# Load sample IDs to exclude
