@@ -55,14 +55,14 @@ if __name__ == '__main__':
 	pdf = df.toPandas()
 
 	# Get samples to exclude
-	exclude_samples = pdf.loc[
-		(~pdf['p22019'].isnull()) &
-		(pdf['p22020'].isnull()) &
+	excluded_samples = pdf.loc[
+		(~pdf['p22019'].isnull()) |
+		(pdf['p22020'].isnull()) |
 		(~pdf['p22027'].isnull())
 	]['eid']
 
 	# Save samples to exclude
-	exclude_samples.to_csv(
+	excluded_samples.to_csv(
 		'excluded_samples.tsv',
 		header=False,
 		index=False,
