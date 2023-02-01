@@ -63,7 +63,7 @@ if __name__ == '__main__':
 
 	# Save samples to exclude
 	exclude_samples.to_csv(
-		'excludes_samples.tsv',
+		'excluded_samples.tsv',
 		header=False,
 		index=False,
 		sep='\t',
