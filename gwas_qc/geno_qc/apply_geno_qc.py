@@ -1,6 +1,6 @@
 """Apply variant QC, calculate and apply sample QC, and save.
 
-Will save QC'd data as MT and locus/alleles as VCF (to make it easy to
+Will save QC'd data as MT and locus/alleles as BGEN (to make it easy to
 use with VEP on UKB RAP)
 """
 
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 		variant_qc_path (str, required): Path to saved variant QC
 			Hail Table.
 		write_path_gc_geno (str, required): Path to write QC'd data as MT.
-		write_path_gc_locus_vcf (str): Path to write VCF with
+		write_path_gc_locus_bgen (str): Path to write BGEN with
 			locus/alleles.
 		qc_params_json (str, required): Path to JSON file with QC
 			parameters.
@@ -36,8 +36,8 @@ if __name__ == '__main__':
 			MatrixTable, dnax://{ukb_db_name's id}/{variant_qc_path}
 			as path to saved variant QC Hail Table, and 
 			dnax://{ukb_db_name's id}/{write_path_gc_geno} as path to
-			write QC'd data as MT. If write_path_gc_locus_vcf is not
-			None, will also use file://{write_path_gc_locus_vcf} as
+			write QC'd data as MT. If write_path_gc_locus_bgen is not
+			None, will also use file://{write_path_gc_locus_bgen} as
 			path to write VCF with locus/alleles.
 	"""
 
@@ -66,10 +66,10 @@ if __name__ == '__main__':
 	)
 	parser.add_argument(
 		'-l',
-		'--write_path_gc_locus_vcf',
+		'--write_path_gc_locus_bgen',
 		type=str,
 		default=None,
-		help='Path to write VCF with locus/alleles.',
+		help='Path to write BGEN with locus/alleles.',
 	)
 	parser.add_argument(
 		'-j',
@@ -176,14 +176,21 @@ if __name__ == '__main__':
 	mt = mt.drop('sample_qc')
 	mt.write(write_path, overwrite=True)
 	
-	# Save locus/alleles as VCF
-	if args.write_path_gc_locus_vcf is not None:
+	# Save locus/alleles as BGEN
+	if args.write_path_gc_locus_bgen is not None:
 		if args.ukb_db_name is not None:
-			write_path_vcf = f'file://{args.write_path_gc_locus_vcf}'
+			write_path_bgen = f'file://{args.write_path_gc_locus_vcf}'
 		else:
-			write_path_vcf = args.write_path_gc_locus_vcf
+			write_path_bgen = args.write_path_gc_locus_vcf
 		sites_mt = hl.MatrixTable.from_rows_table(mt.rows())
 		sites_mt = sites_mt.drop(
 			*list(sites_mt.row_value.keys())
 		)
-		hl.export_vcf(sites_mt, write_path_vcf)
+		hl.export_bgen(
+			sites_mt,
+			write_path_bgen,
+			compresssion_codec='zlib'	
+		)
+
+		# Index BGEN
+		hl.index_bgen(write_path_bgen)
