@@ -4,6 +4,6 @@
 		"p_value_hwe": 1e-6
 	},
 	"sample": {
-		"call_rate": 0.98
+		"call_rate": 0.99999
 	}
 }

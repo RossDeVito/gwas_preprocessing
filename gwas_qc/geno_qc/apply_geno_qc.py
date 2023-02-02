@@ -162,13 +162,13 @@ if __name__ == '__main__':
 	)
 
 	# Filter data to variants in variant_QC
-	mt = mt.semijoin_rows(variant_qc)
+	mt = mt.semi_join_rows(variant_qc)
 
 	# Compute sample QC
 	mt = hl.sample_qc(mt)
 
 	# Apply sample QC filters to sample_QC
-	mt = mt.filter(
+	mt = mt.filter_cols(
 		(mt.sample_qc.call_rate >= qc_params['sample']['call_rate'])
 	)
 
