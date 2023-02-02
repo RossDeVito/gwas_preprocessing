@@ -157,8 +157,8 @@ if __name__ == '__main__':
 	# 			)
 
 	variant_qc = variant_qc.filter(
-		(variant_qc.call_rate >= qc_params['variant']['call_rate']) &
-		(variant_qc.p_value_hwe >= qc_params['variant']['p_value_hwe'])
+		(variant_qc.variant_qc.call_rate >= qc_params['variant']['call_rate']) &
+		(variant_qc.variant_qc.p_value_hwe >= qc_params['variant']['p_value_hwe'])
 	)
 
 	# Filter data to variants in variant_QC
