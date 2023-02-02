@@ -223,3 +223,7 @@ def main():
 		)
 	else:
 		bgen_mt.write(args.write_path, overwrite=True)
+
+
+if __name__ == '__main__':
+	main()
