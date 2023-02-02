@@ -6,7 +6,8 @@ bgen-to-mt \
 	-w chr19_geno.mt \
 	-i \
 	-s \
-	-u rdevito_p1_db
+	-u rdevito_p1_db \
+	--split_multi \
 	-b \
 		# "$GENO_DATA_DIR/ukb23159_c1_b0_v1.bgen" \
 		# "$GENO_DATA_DIR/ukb23159_c2_b0_v1.bgen" \
