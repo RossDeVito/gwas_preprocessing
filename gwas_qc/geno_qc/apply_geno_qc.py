@@ -12,7 +12,7 @@ import hail as hl
 
 """
 run apply_geno_qc.py -m split_subset_geno.mt -v split_subset_variant_qc.ht \
-	-w split_subset_qced.mt -l /mnt/project/rdevito/project1_data/split_subset_qced_loc.vcf.gz \
+	-w split_subset_qced.mt -l /mnt/project/rdevito/project1_data/split_subset_qced_loc.bgen \
 	-j ../../scripts/qc_params/dev.json -u rdevito_p1_db
 """
 
@@ -59,14 +59,14 @@ if __name__ == '__main__':
 	)
 	parser.add_argument(
 		'-w',
-		'--write_path_gc_geno',
+		'--write_path_qc_geno',
 		type=str,
 		required=True,
 		help='Path to write QC\'d data as MT.',
 	)
 	parser.add_argument(
 		'-l',
-		'--write_path_gc_locus_bgen',
+		'--write_path_qc_locus_bgen',
 		type=str,
 		default=None,
 		help='Path to write BGEN with locus/alleles.',
@@ -95,9 +95,9 @@ if __name__ == '__main__':
 			'dnax://{ukb_db_name\'s id}/{mt_path} as path to saved'
 			'MatrixTable, dnax://{ukb_db_name\'s id}/{variant_qc_path}'
 			'as path to saved variant QC Hail Table, and '
-			'dnax://{ukb_db_name\'s id}/{write_path_gc_geno} as path to'
-			'write QC\'d data as MT. If write_path_gc_locus_vcf is not'
-			'None, will also use file://{write_path_gc_locus_vcf} as'
+			'dnax://{ukb_db_name\'s id}/{write_path_qc_geno} as path to'
+			'write QC\'d data as MT. If write_path_qc_locus_vcf is not'
+			'None, will also use file://{write_path_qc_locus_bgen} as'
 			'path to write VCF with locus/alleles.',
 	)
 	args = parser.parse_args()
@@ -128,7 +128,7 @@ if __name__ == '__main__':
 
 		mt_path = f'dnax://{db_uri}/{args.mt_path}'
 		variant_qc_path = f'dnax://{db_uri}/{args.variant_qc_path}'
-		write_path = f'dnax://{db_uri}/{args.write_path_gc_geno}'
+		write_path = f'dnax://{db_uri}/{args.write_path_qc_geno}'
 	else:
 		hl.init(default_reference=args.ref_genome)
 		mt_path = args.mt_path
@@ -177,11 +177,11 @@ if __name__ == '__main__':
 	mt.write(write_path, overwrite=True)
 	
 	# Save locus/alleles as BGEN
-	if args.write_path_gc_locus_bgen is not None:
+	if args.write_path_qc_locus_bgen is not None:
 		if args.ukb_db_name is not None:
-			write_path_bgen = f'file://{args.write_path_gc_locus_vcf}'
+			write_path_bgen = f'file://{args.write_path_qc_locus_bgen}'
 		else:
-			write_path_bgen = args.write_path_gc_locus_vcf
+			write_path_bgen = args.write_path_qc_locus_bgen
 		sites_mt = hl.MatrixTable.from_rows_table(mt.rows())
 		sites_mt = sites_mt.drop(
 			*list(sites_mt.row_value.keys())
