@@ -109,11 +109,22 @@ def main():
 	# Percent with 10 read depth, suggested here:
 	# dnanexus.gitbook.io/uk-biobank-rap/science-corner/whole-exome-sequencing-oqfe-protocol/generation-and-utilization-of-quality-control-set-90pct10dp-on-oqfe-data/details-on-processing-the-300k-exome-data-to-generate-the-quality-control-set
 	if args.dp10_frac:
+		# mt = mt.annotate_rows(
+		# 	variant_qc=mt.variant_qc.annotate(pct_10dp=hl.agg.filter(
+		# 		hl.is_defined(mt.GT),
+		# 		hl.agg.fraction(mt.DP >= 10)
+		# 	))
+		# )
 		mt = mt.annotate_rows(
-			variant_qc=mt.variant_qc.annotate(pct_10dp=hl.agg.filter(
+			pct_10dp=hl.agg.filter(
 				hl.is_defined(mt.GT),
 				hl.agg.fraction(mt.DP >= 10)
-			))
+			)
+		)
+
+		# make pct_10dp a sub-field of variant_qc
+		mt = mt.annotate_rows(
+			variant_qc=mt.variant_qc.annotate(pct_10dp=mt.pct_10dp)
 		)
 
 	# Save variant QC metrics
