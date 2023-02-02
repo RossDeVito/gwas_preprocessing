@@ -10,6 +10,12 @@ import json
 
 import hail as hl
 
+"""
+run apply_geno_qc.py -m split_subset_geno.mt -v split_subset_variant_qc.ht \
+	-w split_subset_qced.mt -l /mnt/project/rdevito/project1_data/split_subset_qced_loc.vcf.gz \
+	-j ../../scripts/qc_params/dev.json -u rdevito_p1_db
+"""
+
 
 if __name__ == '__main__':
 	"""Apply variant QC, calculate and apply sample QC, and save.
@@ -122,7 +128,7 @@ if __name__ == '__main__':
 
 		mt_path = f'dnax://{db_uri}/{args.mt_path}'
 		variant_qc_path = f'dnax://{db_uri}/{args.variant_qc_path}'
-		write_path = f'file://{args.write_path}'
+		write_path = f'dnax://{db_uri}/{args.write_path_gc_geno}'
 	else:
 		hl.init(default_reference=args.ref_genome)
 		mt_path = args.mt_path
@@ -165,6 +171,10 @@ if __name__ == '__main__':
 	mt = mt.filter(
 		(mt.sample_qc.call_rate >= qc_params['sample']['call_rate'])
 	)
+
+	# Drop sample QC data and save as MT
+	mt = mt.drop('sample_qc')
+	mt.write(write_path, overwrite=True)
 	
 	# Save locus/alleles as VCF
 	if args.write_path_gc_locus_vcf is not None:
