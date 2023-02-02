@@ -31,6 +31,9 @@ def main():
 		ukb_db_name (str, or None): If not None, will init Hail with
 			spark as required when using ukb RAP and will save data
 			in dnax://{ukb_db_name's id}/{write_path}
+		split_multi (bool): If True, will split multi-allelic variants
+			into biallelic variants (using Hail's split_multi_hts). If
+			flag present (True), will split multi-allelic variants.
 	"""
 
 	parser = argparse.ArgumentParser()
@@ -99,6 +102,15 @@ def main():
 		help='If not None, will init Hail with spark as required when '
 		'using ukb RAP and will save data in dnax://{ukb_db_name\'s id}/'
 		'{write_path}',
+	)
+	parser.add_argument(
+		'-m',
+		'--split_multi',
+		default=False,
+		action='store_true',
+		help='If True, will split multi-allelic variants into biallelic '
+		'variants (using Hail\'s split_multi_hts). If flag present, will '
+		'split multi-allelic variants.',
 	)
 
 	args = parser.parse_args()
@@ -194,6 +206,10 @@ def main():
 
 		# Filter out excluded samples
 		bgen_mt = bgen_mt.anti_join_cols(excluded_samples)
+
+	# Split multi-allelic variants
+	if args.split_multi:
+		bgen_mt = hl.split_multi_hts(bgen_mt)
 
 	# Write MatrixTable
 	if args.ukb_db_name is not None:
