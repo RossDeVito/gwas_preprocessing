@@ -1,7 +1,8 @@
 {
 	"variant": {
 		"call_rate": [0.999, ">="],
-		"p_value_hwe": [1e-6, ">="]
+		"p_value_hwe": [1e-6, ">="],
+		"AF": [0.01, ">="]
 	},
 	"sample": {
 		"call_rate": [0.99999, ">="]

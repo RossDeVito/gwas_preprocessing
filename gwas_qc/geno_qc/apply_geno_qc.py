@@ -16,8 +16,7 @@ run apply_geno_qc.py -m split_subset_geno.mt -v split_subset_variant_qc.ht \
 	-j ../../scripts/qc_params/dev.json -u rdevito_p1_db
 """
 
-
-if __name__ == '__main__':
+def main():
 	"""Apply variant QC, calculate and apply sample QC, and save.
 	
 	Args:
@@ -329,6 +328,7 @@ if __name__ == '__main__':
 		
 		mt.row_key.export(write_path_tsv)
 
+
 	"""To read in TSV later:
 
 	t_map = {'locus': hl.tstr, 'alleles': hl.tarray(hl.tstr)}
@@ -336,8 +336,10 @@ if __name__ == '__main__':
 		write_path_tsv,
 		types=t_map,
 	)
-	# lht = lht.annotate(locus=hl.parse_locus(lht.locus))
+	lht = lht.annotate(locus=hl.parse_locus(lht.locus))
 	lht = lht.key_by('locus', 'alleles')
-
-	
 	"""
+
+
+if __name__ == '__main__':
+	main()
