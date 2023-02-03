@@ -210,6 +210,28 @@ def main():
 				val = variant_qc.variant_qc.gq_stats.stdev
 			else:
 				raise ValueError(f'Invalid QC parameter: {qc_key}')
+		elif qc_key == 'AF':
+			if qc_comparison == '>':
+				var_filters.append(
+					(variant_qc.variant_qc.AF[1] > qc_val) &
+					(variant_qc.variant_qc.AF[0] > qc_val)
+				)
+			elif qc_comparison == '>=':
+				var_filters.append(
+					(variant_qc.variant_qc.AF[1] >= qc_val) &
+					(variant_qc.variant_qc.AF[0] >= qc_val)
+				)
+			elif qc_comparison == '<':
+				var_filters.append(
+					(variant_qc.variant_qc.AF[1] < qc_val) |
+					(variant_qc.variant_qc.AF[0] < qc_val)
+				)
+			elif qc_comparison == '<=':
+				var_filters.append(
+					(variant_qc.variant_qc.AF[1] <= qc_val) |
+					(variant_qc.variant_qc.AF[0] <= qc_val)
+				)
+			continue # Skip the rest of the loop, sorry this is ugly
 		else:
 			val = variant_qc.variant_qc[qc_key]
 
