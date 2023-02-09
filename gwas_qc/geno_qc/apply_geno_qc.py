@@ -146,7 +146,7 @@ def main():
 	
 	# Add MAF (minor allele frequency) to variant QC data
 	variant_qc = variant_qc.annotate(
-		MAF=hl.min(variant_qc.AF)
+		MAF=hl.min(variant_qc.variant_qc.AF)
 	)
 
 	# Apply variant QC filters to variant_QC

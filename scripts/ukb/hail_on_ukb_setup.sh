@@ -10,3 +10,6 @@ git config --global --add safe.directory /home/dnanexus/gwas_qc
 # install gwas_qc
 cd gwas_qc
 pip install --user -e .
+bgen-to-mt
+pip install -e .
+bgen-to-mt
