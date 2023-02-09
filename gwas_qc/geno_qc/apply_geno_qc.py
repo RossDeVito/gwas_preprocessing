@@ -143,6 +143,11 @@ def main():
 
 	# Load variant QC data
 	variant_qc = hl.read_table(variant_qc_path)
+	
+	# Add MAF (minor allele frequency) to variant QC data
+	variant_qc = variant_qc.annotate(
+		MAF=hl.min(variant_qc.AF)
+	)
 
 	# Apply variant QC filters to variant_QC
 	"""
@@ -174,11 +179,15 @@ def main():
         p_value_excess_het: float64
     }
 
+	Can also use NONZERO_AC key with any value to filter out variants with
+	a zero allele count.
+
 	Example QC parameters:
 	{
 		"variant": {
 			"call_rate": [0.99, ">="],
-			"p_value_hwe": [1e-6, ">"]
+			"p_value_hwe": [1e-6, ">"],
+			"NONZERO_AC": []
 		},
 		"sample": {
 			"call_rate": [0.99, ">="],
@@ -187,7 +196,16 @@ def main():
 	"""
 	var_filters = []
 
-	for qc_key, (qc_val, qc_comparison) in qc_params['variant'].items():
+	for qc_key, qc_val in qc_params['variant'].items():
+		if qc_key == 'NONZERO_AC':
+			# Filter out variants where any allele count is zero
+			var_filters.append(
+				variant_qc.variant_qc.AC.all(lambda x: x != 0)
+			)
+			continue # Skip the rest of the loop, sorry this is ugly
+		else:
+			qc_val, qc_comparison = qc_val
+
 		if 'dp_stats' in qc_key:
 			if 'min' in qc_key:
 				val = variant_qc.variant_qc.dp_stats.min
@@ -231,7 +249,7 @@ def main():
 					(variant_qc.variant_qc.AF[1] <= qc_val) |
 					(variant_qc.variant_qc.AF[0] <= qc_val)
 				)
-			continue # Skip the rest of the loop, sorry this is ugly
+			continue
 		else:
 			val = variant_qc.variant_qc[qc_key]
 
@@ -254,6 +272,9 @@ def main():
 
 	# Filter data to variants in variant_QC
 	mt = mt.semi_join_rows(variant_qc)
+
+	# Annotate mt with MAF from variant_QC
+	mt = mt.annotate_rows(variant_qc[mt.row_key].MAF)
 
 	# Compute sample QC
 	"""
@@ -333,15 +354,11 @@ def main():
 	if len(samp_filters) > 0:
 		mt = mt.filter_cols(hl.all(lambda x: x, samp_filters))
 
-	# mt = mt.filter_cols(
-	# 	(mt.sample_qc.call_rate >= qc_params['sample']['call_rate'])
-	# )
-
 	# Drop sample QC data and save as MT
 	mt = mt.drop('sample_qc')
 	mt.write(write_path, overwrite=True)
 	
-	# Save locus/alleles as BGEN
+	# Save locus/alleles as TSV
 	if args.write_path_gc_locus_tsv is not None:
 		if args.ukb_db_name is not None:
 			write_path_tsv = f'file://{args.write_path_gc_locus_tsv}'
