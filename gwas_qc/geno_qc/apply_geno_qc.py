@@ -274,7 +274,7 @@ def main():
 	mt = mt.semi_join_rows(variant_qc)
 
 	# Annotate mt with MAF from variant_QC
-	mt = mt.annotate_rows(variant_qc[mt.row_key].MAF)
+	mt = mt.annotate_rows(MAF=variant_qc[mt.row_key].MAF)
 
 	# Compute sample QC
 	"""
