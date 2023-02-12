@@ -131,9 +131,10 @@ def main():
 
 	# Label most severe consequences
 	anno_table = anno_table.annotate(
-		is_most_severe=exp_mt.vep.transcript_consequences.consequence_terms.contains(
-			exp_mt.most_severe_csq
-		)
+		is_most_severe=\
+			anno_table.vep.transcript_consequences.consequence_terms.contains(
+				anno_table.most_severe_csq
+			)
 	)
 
 	# Get consequences and info on what transcript, protein, gene, etc is impacted
