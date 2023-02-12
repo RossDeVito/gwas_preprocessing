@@ -100,7 +100,7 @@ def main():
 	variant_table = hl.import_table(
 		file_prefix + args.variant_table,
 		types=dtype_map,
-	}
+	)
 
 	variant_table = variant_table.annotate(
 		locus=hl.parse_locus(variant_table.locus)
