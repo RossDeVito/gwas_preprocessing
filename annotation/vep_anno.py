@@ -5,7 +5,7 @@ import os
 import json
 
 import hail as hl
-import gnomad
+import gnomad.utils.vep as gnomad_utils
 
 
 def main():
@@ -116,13 +116,13 @@ def main():
 	# Process results
 
 	# Filter to just canonical variants with some consequence
-	anno_table = gnomad.utils.vep.filter_vep_transcript_csqs(
+	anno_table = gnomad_utils.filter_vep_transcript_csqs(
 		anno_table,
 		synonymous=False,
 		canonical=True,
 		filter_empty_csq=True
 	)
-	anno_table = gnomad.utils.vep.get_most_severe_consequence_for_summary(
+	anno_table = gnomad_utils.get_most_severe_consequence_for_summary(
 		anno_table
 	)
 
