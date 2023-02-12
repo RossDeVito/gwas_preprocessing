@@ -18,8 +18,8 @@ def main():
 		output_ht (str): Path to output Hail table.
 		ref_genome (str): Reference genome. Default: 'GRCh38'.
 		ukb_db_name (str, or None): If not None, will init Hail with
-			spark as required when using ukb RAP, will use 'file://'
-			before variant_table path, and output_ht will use
+			spark as required when using ukb RAP and will use 'file://'
+			before variant_table and vep_config. For output_ht will use
 			dnax://{ukb_db_name's id}/{output_ht}.
 	"""
 
@@ -110,7 +110,7 @@ def main():
 	# Annotate
 	anno_table = hl.vep(
 		variant_table,
-		args.vep_config,
+		file_prefix + args.vep_config,
 	)
 
 	# Process results
