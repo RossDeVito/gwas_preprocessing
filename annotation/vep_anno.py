@@ -21,6 +21,8 @@ def main():
 			spark as required when using ukb RAP and will use 'file://'
 			before variant_table and vep_config. For output_ht will use
 			dnax://{ukb_db_name's id}/{output_ht}.
+		n_cores (int): Number of cores. Will load variant data with at least
+			2*n_cores partitions if n_cores is not None.
 	"""
 
 	parser = argparse.ArgumentParser()
@@ -63,6 +65,14 @@ def main():
 		'before variant_table and vep_config. For output_ht will use'
 		"dnax://{ukb_db_name's id}/{output_ht}.",
 	)
+	parser.add_argument(
+		'-n',
+		'--n_cores',
+		type=int,
+		default=None,
+		help='Number of cores. Will load variant data with at least'
+		'2*n_cores partitions if n_cores is not None.',
+	)
 
 	args = parser.parse_args()
 
@@ -100,6 +110,7 @@ def main():
 	variant_table = hl.import_table(
 		file_prefix + args.variant_table,
 		types=dtype_map,
+		min_partitions=2*args.n_cores if args.n_cores is not None else None,
 	)
 
 	variant_table = variant_table.annotate(
