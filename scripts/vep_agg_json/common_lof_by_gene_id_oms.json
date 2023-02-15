@@ -1,0 +1,6 @@
+{
+	"group_by_feature": "gene_id",
+	"consequence": "lof",
+	"only_most_severe": true,
+	"MAF_geq": 0.01
+}
