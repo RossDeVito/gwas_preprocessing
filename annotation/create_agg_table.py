@@ -219,6 +219,9 @@ def main():
 		index='s', columns='feat_name', values='var_count'
 	)
 
+	# Remove columns with 'null' in name
+	agg_table = agg_table.loc[:, ~agg_table.columns.str.contains('null')]
+
 	# Save as parquet
 	agg_table.to_parquet(
 		save_path,
