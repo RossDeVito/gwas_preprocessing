@@ -163,10 +163,10 @@ def main():
 	if 'only_protein_coding' in agg_json and agg_json['only_protein_coding'] is True:
 		anno_ht = anno_ht.filter(anno_ht.protein_coding)
 
-	# If specified 'group_by_feature' or 'consequence' needs filtering
-	# of None values, do so
-	if agg_json['group_by_feature'] == 'protein_id':
-		anno_ht = anno_ht.filter(hl.is_defined(anno_ht.protein_id))
+	# If for 'group_by_feature' and 'consequence' filter out null values
+	anno_ht = anno_ht.filter(
+		hl.is_defined(anno_ht[agg_json['group_by_feature']])
+	)
 
 	if agg_json['consequence'] == 'lof':
 		anno_ht = anno_ht.filter(hl.is_defined(anno_ht.lof))
@@ -182,6 +182,10 @@ def main():
 				],
 				delimiter=''
 			)
+		)
+	else:
+		anno_ht = anno_ht.filter(
+			hl.is_defined(anno_ht[agg_json['consequence']])
 		)
 
 	# Join genotype data to annotations
