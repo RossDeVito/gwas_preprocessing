@@ -219,7 +219,6 @@ def main():
 	agg_table.to_parquet(
 		save_path,
 		index_col='s',
-		partition_cols='s',
 	)
 
 
