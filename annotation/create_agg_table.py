@@ -56,8 +56,8 @@ def main():
 		ukb_db_name (str, optional): If not None, will init Hail with
 			spark as required when using ukb RAP. For mt_path and
 			anno_ht_path, will use path 'dnax://{ukb_db_name's id}/{mt_path}'
-			and 'dnax://{ukb_db_name's id}/{anno_ht_path}'. For agg_json_path
-			and save_path, will prepend 'file://'.
+			and 'dnax://{ukb_db_name's id}/{anno_ht_path}'. For save_path,
+			will prepend 'file://'.
 	"""
 
 	parser = argparse.ArgumentParser()
@@ -126,7 +126,7 @@ def main():
 
 		mt_path = f'dnax://{db_uri}/{args.mt_path}'
 		anno_ht_path = f'dnax://{db_uri}/{args.anno_ht_path}'
-		agg_json_path = f'file://{args.agg_json_path}'
+		agg_json_path = args.agg_json_path
 		save_path = f'file://{args.save_path}'
 	else:
 		hl.init()
