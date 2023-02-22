@@ -201,6 +201,11 @@ def main():
 		var_count=hl.agg.sum(geno_mt.GT.n_alt_alleles())
 	)
 
+	# Remove columns with null
+	agg_mt = agg_mt.filter_cols(
+		~hl.str(agg_mt.col_key).contains('null')
+	)
+
 	# Reformat
 	agg_table = agg_mt.entries()
 	agg_table = agg_table.select(
@@ -218,9 +223,6 @@ def main():
 	agg_table = agg_table.pivot(
 		index='s', columns='feat_name', values='var_count'
 	)
-
-	# Remove columns with 'null' in name
-	agg_table = agg_table.loc[:, ~agg_table.columns.str.contains('null')]
 
 	# Save as parquet
 	agg_table.to_parquet(
