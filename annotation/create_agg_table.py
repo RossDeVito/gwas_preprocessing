@@ -201,9 +201,12 @@ def main():
 		var_count=hl.agg.sum(geno_mt.GT.n_alt_alleles())
 	)
 
-	# Remove columns with null
-	agg_mt = agg_mt.filter_cols(
-		~hl.str(agg_mt.col_key).contains('null')
+	# Remove rows where either group_by_feature or consequence is null
+	agg_mt = agg_mt.filter_rows(
+		hl.is_defined(agg_mt[agg_json['group_by_feature']])
+	)
+	agg_mt = agg_mt.filter_rows(
+		hl.is_defined(agg_mt[agg_json['consequence']])
 	)
 
 	# Reformat
