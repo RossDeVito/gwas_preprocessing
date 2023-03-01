@@ -58,6 +58,8 @@ def main():
 			anno_ht_path, will use path 'dnax://{ukb_db_name's id}/{mt_path}'
 			and 'dnax://{ukb_db_name's id}/{anno_ht_path}'. For save_path,
 			will prepend 'file://'.
+		target_partition_size (int, optional): Target partition size in MB
+			for saved parquet partitions. Default is 100.
 	"""
 
 	parser = argparse.ArgumentParser()
@@ -100,6 +102,14 @@ def main():
 			'"dnax://{ukb_db_name\'s id}/{mt_path}" and'
 			'"dnax://{ukb_db_name\'s id}/{anno_ht_path}". For agg_json_path'
 			'and save_path, will prepend "file://".',
+	)
+	parser.add_argument(
+		'-p',
+		'--target_partition_size',
+		type=int,
+		default=100,
+		help='Target partition size in MB for saved parquet partitions.'
+			'Default is 100.',
 	)
 
 	args = parser.parse_args()
@@ -226,6 +236,15 @@ def main():
 	agg_table = agg_table.pivot(
 		index='s', columns='feat_name', values='var_count'
 	)
+
+	# # Repartition
+	# agg_table = agg_table.sort_index()
+	
+	# # head head to pandas to estimate memory per row and use to compute
+	# # number of partitions
+	# samples = agg_table.head(5).to_pandas()
+
+
 
 	# Save as parquet
 	agg_table.to_parquet(

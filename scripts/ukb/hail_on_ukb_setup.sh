@@ -9,6 +9,9 @@ pip install --force-reinstall -v "pyproj==3.3.1"
 # For parquet
 pip install pyarrow fsspec
 
+# For vaex
+pip install vaex rich
+
 # Git pull and fix ownership issure
 git clone https://github.com/RossDeVito/gwas_preprocessing
 git config --global --add safe.directory /home/dnanexus/gwas_preprocessing

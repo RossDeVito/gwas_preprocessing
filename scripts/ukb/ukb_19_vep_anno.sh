@@ -5,4 +5,4 @@ vep-anno \
 	-c /opt/notebooks/gwas_preprocessing/scripts/vep_specs/vep_ukb_rap.json \
 	-o chr19_vep_anno.ht \
 	-u rdevito_p1_db \
-	-n 36
+	-n 48

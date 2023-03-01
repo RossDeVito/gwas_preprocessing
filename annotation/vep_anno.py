@@ -110,7 +110,7 @@ def main():
 	variant_table = hl.import_table(
 		file_prefix + args.variant_table,
 		types=dtype_map,
-		min_partitions=2*args.n_cores if args.n_cores is not None else None,
+		min_partitions=4*args.n_cores if args.n_cores is not None else None,
 	)
 
 	variant_table = variant_table.annotate(
@@ -161,11 +161,14 @@ def main():
 		gene_symbol=anno_table.vep.transcript_consequences.gene_symbol,
 		biotype=anno_table.vep.transcript_consequences.biotype
 	)
+	anno_table = anno_table.repartition(
+		4*args.n_cores if args.n_cores is not None else None
+	)
 
 	# Save as Hail Table
 	if args.ukb_db_name is not None:
 		print(
-			"Writing to dnax://{}/{}".format(db_uri, args.output_ht),
+			"Will write to dnax://{}/{}".format(db_uri, args.output_ht),
 			flush=True
 		)
 		anno_table.write(
