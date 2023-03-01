@@ -161,9 +161,9 @@ def main():
 		gene_symbol=anno_table.vep.transcript_consequences.gene_symbol,
 		biotype=anno_table.vep.transcript_consequences.biotype
 	)
-	anno_table = anno_table.repartition(
-		4*args.n_cores if args.n_cores is not None else None
-	)
+	# anno_table = anno_table.repartition(
+	# 	4*args.n_cores if args.n_cores is not None else None
+	# )
 
 	# Save as Hail Table
 	if args.ukb_db_name is not None:
