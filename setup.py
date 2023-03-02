@@ -11,6 +11,7 @@ setup(
 			'apply-geno-qc = qc.geno_qc.apply_geno_qc:main',
 			'vep-anno = annotation.vep_anno:main',
 			'agg-anno = annotation.create_agg_table:main',
+            'rewrite-agg-table = annotation.rewrite_agg_table:main',
 		]
 	}
 )
