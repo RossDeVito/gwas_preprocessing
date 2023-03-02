@@ -11,7 +11,11 @@ import dask.dataframe as dd
 from dask.distributed import Client, progress
 
 
-def main():
+# def main():
+
+
+
+if __name__ == '__main__':
 	"""
 	Rewrite agg table parquet with known divisions, an index, and a
 	_metadata file. Speeds up downstream use of the table.
@@ -30,7 +34,7 @@ def main():
 			memory per worker.
 		non_int_index (bool): If True, will not convert index to int.
 	"""
-    
+	
 	parser = argparse.ArgumentParser()
 
 	parser.add_argument(
@@ -108,7 +112,3 @@ def main():
 		write_metadata_file=not args.no_metadata_file,
 		compute=True,
 	)
-
-
-if __name__ == '__main__':
-	main()
