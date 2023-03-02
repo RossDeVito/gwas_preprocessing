@@ -7,7 +7,7 @@ agg-anno \
 	-s /home/dnanexus/unindexed_chr19_rare_lof_by_gene_id_oms.parquet \
 	-u rdevito_p1_db
 
-python ../../annotation/rewrite_agg_table.py \
+python3 ../../annotation/rewrite_agg_table.py \
 	-p /home/dnanexus/unindexed_chr19_rare_lof_by_gene_id_oms.parquet \
 	-s /home/dnanexus/chr19_rare_lof_by_gene_id_oms.parquet \
 	-c 2

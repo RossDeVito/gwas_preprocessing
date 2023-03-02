@@ -10,7 +10,10 @@ pip install --force-reinstall -v "pyproj==3.3.1"
 pip install pyarrow fsspec
 
 # For vaex
-pip install vaex rich
+# pip install vaex rich
+
+# For dask
+pip install "dask[complete]"
 
 # Git pull and fix ownership issure
 git clone https://github.com/RossDeVito/gwas_preprocessing
