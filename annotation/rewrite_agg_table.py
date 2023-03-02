@@ -105,7 +105,7 @@ def main():
 		args.save_path,
 		write_index=True,
 		overwrite=True,
-		write_metadata=not args.no_metadata_file,
+		write_metadata_file=not args.no_metadata_file,
 		compute=True,
 	)
 
