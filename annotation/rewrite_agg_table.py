@@ -109,9 +109,6 @@ def main():
 		compute=True,
 	)
 
-	# Close client
-	client.close()
-
 
 if __name__ == '__main__':
 	main()
